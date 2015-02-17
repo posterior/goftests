@@ -101,7 +101,11 @@ def unif01_goodness_of_fit(samples, plot=False):
     return multinomial_goodness_of_fit(probs, counts, len(samples), plot=plot)
 
 
-def exp_goodness_of_fit(samples, plot, normalized=True, return_dict=False):
+def exp_goodness_of_fit(
+        samples,
+        plot=False,
+        normalized=True,
+        return_dict=False):
     """
     Transform exponentially distribued samples to unif01 distribution
     and assess goodness of fit via binned Pearson's chi^2 test.
@@ -265,11 +269,7 @@ def split_discrete_continuous(data):
                 repr(data), str(type(data))))
 
 
-def mixed_density_goodness_of_fit(
-        samples,
-        scores,
-        plot=False,
-        normalized=True):
+def mixed_density_goodness_of_fit(samples, probs, plot=False, normalized=True):
     """
     Test general mixed discrete+continuous datatypes by
     (1) testing the continuous part conditioned on each discrete value
@@ -277,29 +277,29 @@ def mixed_density_goodness_of_fit(
     (3) testing the estimated total probability (if normalized = True)
 
     Inputs:
-        samples - a list of real-vector-valued samples from a distribution
+        samples - a list of plain-old-data samples from a distribution
         probs - a list of probability densities evaluated at those samples
     """
     assert samples
     discrete_samples = []
     strata = defaultdict(lambda: ([], []))
-    for sample, score in izip(samples, scores):
+    for sample, prob in izip(samples, probs):
         d, c = split_discrete_continuous(sample)
         discrete_samples.append(d)
-        samples, scores = strata[d]
+        samples, probs = strata[d]
         samples.append(c)
-        scores.append(score)
+        probs.append(prob)
 
     # Continuous part
     gofs = []
     discrete_probs = {}
-    for key, (samples, scores) in strata.iteritems():
+    for key, (samples, probs) in strata.iteritems():
         if len(samples[0]) == 1:
-            discrete_probs[key] = numpy.exp(scores[0])
+            discrete_probs[key] = numpy.exp(probs[0])
         else:
             result = auto_density_goodness_of_fit(
                 samples,
-                scores,
+                probs,
                 plot=plot,
                 normalized=False,
                 return_dict=True)

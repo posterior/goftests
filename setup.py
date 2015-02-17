@@ -39,7 +39,7 @@ config = {
     'version': VERSION,
     'description': 'Goodness of fit tests for general datatypes',
     'long_description': long_description,
-    'url': 'https://github.com/forcedotcom/distributions',
+    'url': 'https://github.com/posterior/goftests',
     'author': 'Fritz Obermeyer',
     'maintainer': 'Fritz Obermeyer',
     'maintainer_email': 'fritz.obermeyer@gmail.com',
