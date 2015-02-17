@@ -26,25 +26,29 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from setuptools import find_packages
 from setuptools import setup
 
-VERSION = '0.1.3'
+VERSION = '0.1.4'
+description = 'Goodness of fit tests for general datatypes'
 
-with open('README.md') as f:
-    long_description = f.read()
+try:
+    with open('README.md') as f:
+        long_description = f.read()
+except IOError:
+    print 'WARNING missing README.md'
+    long_description = description
 
 config = {
     'name': 'goftests',
     'version': VERSION,
-    'description': 'Goodness of fit tests for general datatypes',
+    'description': description,
     'long_description': long_description,
     'url': 'https://github.com/posterior/goftests',
     'author': 'Fritz Obermeyer',
     'maintainer': 'Fritz Obermeyer',
     'maintainer_email': 'fritz.obermeyer@gmail.com',
     'license': 'Revised BSD',
-    'packages': find_packages(),
+    'packages': ['goftests'],
     'package_data': {'goftests': 'README.md'},
     'py_modules': ['parsable'],
 }
