@@ -28,14 +28,13 @@
 
 from setuptools import setup
 
-VERSION = '0.1.5'
+VERSION = '0.1.6'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
     with open('README.md') as f:
         long_description = f.read()
 except IOError:
-    print 'WARNING missing README.md'
     long_description = description
 
 config = {
