@@ -26,6 +26,7 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from setuptools import find_packages
 from setuptools import setup
 
 VERSION = '0.1.3'
@@ -43,7 +44,7 @@ config = {
     'maintainer': 'Fritz Obermeyer',
     'maintainer_email': 'fritz.obermeyer@gmail.com',
     'license': 'Revised BSD',
-    'packages': 'goftests',
+    'packages': find_packages(),
     'package_data': {'goftests': 'README.md'},
     'py_modules': ['parsable'],
 }
