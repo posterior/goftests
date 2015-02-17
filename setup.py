@@ -28,7 +28,7 @@
 
 from setuptools import setup
 
-VERSION = '0.1.4'
+VERSION = '0.1.5'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
@@ -48,9 +48,7 @@ config = {
     'maintainer': 'Fritz Obermeyer',
     'maintainer_email': 'fritz.obermeyer@gmail.com',
     'license': 'Revised BSD',
-    'packages': ['goftests'],
-    'package_data': {'goftests': 'README.md'},
-    'py_modules': ['parsable'],
+    'py_modules': ['goftests'],
 }
 
 setup(**config)
