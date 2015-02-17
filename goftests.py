@@ -154,6 +154,15 @@ def volume_of_sphere(dim, radius):
     return radius ** dim * pi ** (0.5 * dim) / gamma(0.5 * dim + 1)
 
 
+def get_nearest_neighbor_distances(samples):
+    from sklearn.neighbors import NearestNeighbors
+    if not hasattr(samples[0], '__iter__'):
+        samples = numpy.array([samples]).T
+    neighbors = NearestNeighbors(n_neighbors=2).fit(samples)
+    distances, indices = neighbors.kneighbors(samples)
+    return distances[:, 1]
+
+
 def vector_density_goodness_of_fit(
         samples,
         probs,
@@ -173,17 +182,12 @@ def vector_density_goodness_of_fit(
         samples - a list of real-vector-valued samples from a distribution
         probs - a list of probability densities evaluated at those samples
     """
-    from sklearn.neighbors import NearestNeighbors
     assert samples
     assert len(samples) == len(probs)
     dim = len(samples[0])
     assert dim
     assert len(samples) > 1000 * dim, 'WARNING imprecision; use more samples'
-    if not hasattr(samples[0], '__iter__'):
-        samples = numpy.array([samples]).T
-    neighbors = NearestNeighbors(n_neighbors=2).fit(samples)
-    distances, indices = neighbors.kneighbors(samples)
-    radii = distances[:, 1]
+    radii = get_nearest_neighbor_distances(samples)
     density = len(samples) * numpy.array(probs)
     volume = volume_of_sphere(dim, radii)
     exp_samples = density * volume
