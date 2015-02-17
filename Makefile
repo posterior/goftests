@@ -3,4 +3,4 @@
 test:
 	find . | grep '\.py$$' | xargs pep8
 	find . | grep '\.py$$' | xargs pyflakes
-	nosetests -v
+	nosetests -v goftests
