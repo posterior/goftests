@@ -27,16 +27,11 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import numpy
-import numpy.random
 from numpy import pi
 import scipy.stats
 from scipy.special import gamma
 from itertools import izip
 from collections import defaultdict
-
-
-def seed_all(seed):
-    numpy.random.seed(seed)
 
 
 def print_histogram(probs, counts):

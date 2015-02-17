@@ -35,7 +35,6 @@ from nose.tools import assert_less
 from goftests import multinomial_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
-from goftests import seed_all
 
 
 def test_multinomial_goodness_of_fit():
@@ -44,7 +43,7 @@ def test_multinomial_goodness_of_fit():
 
 
 def _test_multinomial_goodness_of_fit(dim):
-    seed_all(0)
+    numpy.random.seed(0)
     thresh = 1e-3
     sample_count = int(1e5)
     probs = numpy.random.dirichlet([1] * dim)
