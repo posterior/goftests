@@ -139,18 +139,20 @@ default_params = {
     'truncnorm': [(0.1, 2.0)],
     'vonmises': [tuple(1.0 + rand(1))],
     'wrapcauchy': [(0.5,)],
+    'zipf': [(1.2,)],
 }
 
 known_failures = [
     'alpha',
-    'dirichlet',
     'boltzmann',
+    'dirichlet',
     'gausshyper',  # very slow
     'ksone',  # ???
     'levy_stable',  # ???
     'randint',  # too sparse
     'rv_continuous',  # abstract
     'rv_discrete',  # abstract
+    'zipf',  # bug?
 ]
 
 
