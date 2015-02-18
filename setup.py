@@ -28,7 +28,7 @@
 
 from setuptools import setup
 
-VERSION = '0.1.8'
+VERSION = '0.2.0'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
