@@ -27,14 +27,21 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import numpy
+import scipy.stats
 from numpy import pi
+from numpy.testing import rand
+from nose import SkipTest
 from nose.tools import assert_almost_equal
 from nose.tools import assert_equal
 from nose.tools import assert_greater
 from nose.tools import assert_less
 from goftests import multinomial_goodness_of_fit
+from goftests import discrete_goodness_of_fit
+from goftests import auto_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
+
+TEST_FAILURE_RATE = 1e-3
 
 
 def test_multinomial_goodness_of_fit():
@@ -44,17 +51,16 @@ def test_multinomial_goodness_of_fit():
 
 def _test_multinomial_goodness_of_fit(dim):
     numpy.random.seed(0)
-    thresh = 1e-3
     sample_count = int(1e5)
     probs = numpy.random.dirichlet([1] * dim)
 
     counts = numpy.random.multinomial(sample_count, probs)
     p_good = multinomial_goodness_of_fit(probs, counts, sample_count)
-    assert_greater(p_good, thresh)
+    assert_greater(p_good, TEST_FAILURE_RATE)
 
     unif_counts = numpy.random.multinomial(sample_count, [1. / dim] * dim)
     p_bad = multinomial_goodness_of_fit(probs, unif_counts, sample_count)
-    assert_less(p_bad, thresh)
+    assert_less(p_bad, TEST_FAILURE_RATE)
 
 
 def test_volume_of_sphere():
@@ -98,3 +104,84 @@ def split_example(i):
 def test_split_continuous_discrete():
     for i in xrange(len(split_examples)):
         yield split_example, i
+
+
+numpy.random.seed(0)
+default_params = {
+    'bernoulli': [(0.2,)],
+    'binom': [(40, 0.4)],
+    'dirichlet': [
+        (1.0 + rand(2),),
+        (1.0 + rand(3),),
+        (1.0 + rand(4),),
+    ],
+    'erlang': [(7,)],
+    'dlaplace': [(0.8,)],
+    'frechet': [tuple(2 * rand(1)) + (0,) + tuple(2 * rand(2))],
+    'gausshyper': [],  # very slow
+    'geom': [(0.1,)],
+    'hypergeom': [(40, 14, 24)],
+    'ksone': [],  # ???
+    'levy_stable': [],  # ???
+    'logser': [(0.9,)],
+    'multivariate_normal': [
+        (numpy.ones(1), numpy.eye(1)),
+        (numpy.ones(2), numpy.eye(2)),
+        (numpy.ones(3), numpy.eye(3)),
+    ],
+    'nbinom': [(40, 0.4)],
+    'ncf': [(27, 27, 0.415784417992)],
+    'planck': [(0.51,)],
+    'poisson': [(20,)],
+    'reciprocal': [tuple(numpy.array([0, 1]) + rand(1)[0])],
+    'randint': [],  # too sparse
+    'rv_continuous': [],  # abstract
+    'rv_discrete': [],  # abstract
+    'triang': [tuple(rand(1))],
+    'truncnorm': [(0.1, 2.0)],
+    'vonmises': [tuple(1.0 + rand(1))],
+    'wrapcauchy': [(0.5,)],
+}
+
+known_failures = [
+    'alpha',
+    'dirichlet',
+    'boltzmann',
+]
+
+
+def get_dim(thing):
+    if hasattr(thing, '__len__'):
+        return len(thing)
+    else:
+        return 1
+
+
+def _test_scipy_stats(name):
+    if name in known_failures:
+        raise SkipTest('known failure')
+    dist = getattr(scipy.stats, name)
+    try:
+        params = default_params[name]
+    except KeyError:
+        params = [tuple(1.0 + rand(dist.numargs))]
+    for param in params:
+        print 'param = {}'.format(param)
+        dim = get_dim(dist.rvs(*param))
+        sample_count = 1000 + 1000 * dim
+        samples = list(dist.rvs(*param, size=sample_count))
+        if hasattr(dist, 'pmf'):
+            probs_dict = {key: dist.pmf(key, *param) for key in set(samples)}
+            gof = discrete_goodness_of_fit(samples, probs_dict, plot=True)
+        else:
+            probs = [dist.pdf(sample, *param) for sample in samples]
+            gof = auto_density_goodness_of_fit(samples, probs, plot=True)
+        # gof = mixed_density_goodness_of_fit(samples, probs, plot=True)
+        assert_greater(gof, TEST_FAILURE_RATE)
+
+
+def test_scipy_stats():
+    numpy.random.seed(0)
+    for name in dir(scipy.stats):
+        if hasattr(getattr(scipy.stats, name), 'rvs'):
+            yield _test_scipy_stats, name

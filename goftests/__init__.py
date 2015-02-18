@@ -181,7 +181,7 @@ def vector_density_goodness_of_fit(
         samples - a list of real-vector-valued samples from a distribution
         probs - a list of probability densities evaluated at those samples
     """
-    assert samples
+    assert len(samples)
     assert len(samples) == len(probs)
     dim = len(samples[0])
     assert dim
@@ -199,8 +199,8 @@ def auto_density_goodness_of_fit(
         plot=False,
         normalized=True,
         return_dict=False):
-    assert samples
-    if len(samples[0]) == 1:
+    assert len(samples)
+    if not hasattr(samples[0], '__len__') or len(samples[0]) == 1:
         fun = density_goodness_of_fit
     else:
         fun = vector_density_goodness_of_fit
@@ -280,7 +280,7 @@ def mixed_density_goodness_of_fit(samples, probs, plot=False, normalized=True):
         samples - a list of plain-old-data samples from a distribution
         probs - a list of probability densities evaluated at those samples
     """
-    assert samples
+    assert len(samples)
     discrete_samples = []
     strata = defaultdict(lambda: ([], []))
     for sample, prob in izip(samples, probs):
@@ -295,7 +295,7 @@ def mixed_density_goodness_of_fit(samples, probs, plot=False, normalized=True):
     discrete_probs = {}
     for key, (samples, probs) in strata.iteritems():
         if len(samples[0]) == 1:
-            discrete_probs[key] = numpy.exp(probs[0])
+            discrete_probs[key] = probs[0]
         else:
             result = auto_density_goodness_of_fit(
                 samples,
