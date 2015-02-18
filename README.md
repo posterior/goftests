@@ -43,7 +43,7 @@ Thus to test a sampler we usually write
     TEST_FAILURE_RATE = 1e-3
 
     def test_my_sampler(count=100):
-        numpy.random.seed(0)
+        seed_all(0)
         samples = [my_sampler.rvs() for _ in xrange(count)]
         probs = [my_sampler.pdf(x) for x in samples]
         gof = mixed_density_goodness_of_fit(samples, probs)
@@ -88,7 +88,7 @@ As with poorly mixing chains, try running for longer.
 
 #### Spuriously failing tests
 
-Be sure to set a deterministic seed via `numpy.random.seed(...)`
+Be sure to set a deterministic seed via `seed_all(...)`
 before generating each dataset.
 In particular, some test runners run tests in a nondeterministic order,
 so setting the seed before generating each sample ensures deterministic behavior.

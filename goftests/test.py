@@ -36,10 +36,12 @@ from nose.tools import assert_almost_equal
 from nose.tools import assert_equal
 from nose.tools import assert_greater
 from nose.tools import assert_less
+from goftests import seed_all
+from goftests import get_dim
 from goftests import multinomial_goodness_of_fit
 from goftests import discrete_goodness_of_fit
 from goftests import auto_density_goodness_of_fit
-# from goftests import mixed_density_goodness_of_fit
+from goftests import mixed_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
 
@@ -52,7 +54,7 @@ def test_multinomial_goodness_of_fit():
 
 
 def _test_multinomial_goodness_of_fit(dim):
-    numpy.random.seed(0)
+    seed_all(0)
     sample_count = int(1e5)
     probs = numpy.random.dirichlet([1] * dim)
 
@@ -108,7 +110,7 @@ def test_split_continuous_discrete():
         yield split_example, i
 
 
-numpy.random.seed(0)
+seed_all(0)
 default_params = {
     'bernoulli': [(0.2,)],
     'binom': [(40, 0.4)],
@@ -152,13 +154,6 @@ known_failures = [
 ]
 
 
-def get_dim(thing):
-    if hasattr(thing, '__len__'):
-        return len(thing)
-    else:
-        return 1
-
-
 def _test_scipy_stats(name):
     if name in known_failures:
         raise SkipTest('known failure')
@@ -182,12 +177,12 @@ def _test_scipy_stats(name):
             gof = auto_density_goodness_of_fit(samples, probs, plot=True)
         assert_greater(gof, TEST_FAILURE_RATE)
 
-        # This currently fails
-        # gof = mixed_density_goodness_of_fit(samples, probs, plot=True)
+        gof = mixed_density_goodness_of_fit(samples, probs, plot=True)
+        assert_greater(gof, TEST_FAILURE_RATE)
 
 
 def test_scipy_stats():
-    numpy.random.seed(0)
+    seed_all(0)
     for name in dir(scipy.stats):
         if hasattr(getattr(scipy.stats, name), 'rvs'):
             yield _test_scipy_stats, name

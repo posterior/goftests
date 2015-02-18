@@ -26,12 +26,26 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import random
 import numpy
+import numpy.random
 from numpy import pi
 import scipy.stats
 from scipy.special import gamma
 from itertools import izip
 from collections import defaultdict
+
+
+def seed_all(seed):
+    random.seed(seed)
+    numpy.random.seed(seed)
+
+
+def get_dim(thing):
+    if hasattr(thing, '__len__'):
+        return len(thing)
+    else:
+        return 1
 
 
 def print_histogram(probs, counts):
@@ -183,7 +197,7 @@ def vector_density_goodness_of_fit(
     """
     assert len(samples)
     assert len(samples) == len(probs)
-    dim = len(samples[0])
+    dim = get_dim(samples[0])
     assert dim
     assert len(samples) > 1000 * dim, 'WARNING imprecision; use more samples'
     radii = get_nearest_neighbor_distances(samples)
@@ -193,15 +207,43 @@ def vector_density_goodness_of_fit(
     return exp_goodness_of_fit(exp_samples, plot, normalized, return_dict)
 
 
-def auto_density_goodness_of_fit(
+def trivial_density_goodness_of_fit(
         samples,
         probs,
         plot=False,
         normalized=True,
         return_dict=False):
     assert len(samples)
-    if not hasattr(samples[0], '__len__') or len(samples[0]) == 1:
+    assert all(sample == samples[0] for sample in samples)
+    result = {'gof': 1.0}
+    if not normalized:
+        result['norm'] = probs[0]
+    if return_dict:
+        return result
+    else:
+        return result['gof']
+
+
+def auto_density_goodness_of_fit(
+        samples,
+        probs,
+        plot=False,
+        normalized=True,
+        return_dict=False):
+    """
+    Dispatch on sample dimention and delegate to one of:
+    - density_goodness_of_fit
+    - vector_density_goodness_of_fit
+    - trivial_density_goodness_of_fit
+    """
+    assert len(samples)
+    dim = get_dim(samples[0])
+    if dim == 0:
+        fun = trivial_density_goodness_of_fit
+    elif dim == 1:
         fun = density_goodness_of_fit
+        if hasattr(samples[0], '__len__'):
+            samples = [sample[0] for sample in samples]
     else:
         fun = vector_density_goodness_of_fit
     return fun(samples, probs, plot, normalized, return_dict)
@@ -294,17 +336,14 @@ def mixed_density_goodness_of_fit(samples, probs, plot=False, normalized=True):
     gofs = []
     discrete_probs = {}
     for key, (samples, probs) in strata.iteritems():
-        if len(samples[0]) == 1:
-            discrete_probs[key] = probs[0]
-        else:
-            result = auto_density_goodness_of_fit(
-                samples,
-                probs,
-                plot=plot,
-                normalized=False,
-                return_dict=True)
-            gofs.append(result['gof'])
-            discrete_probs[key] = result['norm']
+        result = auto_density_goodness_of_fit(
+            samples,
+            probs,
+            plot=plot,
+            normalized=False,
+            return_dict=True)
+        gofs.append(result['gof'])
+        discrete_probs[key] = result['norm']
 
     # Discrete part
     if len(strata) > 1:
