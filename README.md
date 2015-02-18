@@ -109,6 +109,20 @@ or reduce to standard tests in another package like
 [scipy.stats]: http://docs.scipy.org/doc/scipy/reference/stats.html#statistical-functions
 [statsmodels]: http://statsmodels.sourceforge.net/stable/stats.html#goodness-of-fit-tests-and-measures
 
+## References
+
+-   [1] <name=1>
+    Peter J Bickel, Leo Breiman (1983)
+    "Sums of functions of nearest neighbor distancess, moment bounds,
+    limit theorems and a goodness of fit test"
+    [pdf](http://projecteuclid.org/download/pdf_1/euclid.aop/1176993668)
+
+-   [2] <name=2>
+    Mike Williams (2010)
+    "How good are your fits? Unbinned multivariate goodness-of-fit tests
+    in high energy physics"
+    [pdf](http://arxiv.org/pdf/1006.3019v2.pdf)
+
 ## License
 
 Copyright (c) 2014 Salesforce.com, Inc. All rights reserved. <br/>
