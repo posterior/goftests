@@ -1,0 +1,22 @@
+digraph G {
+    overlap=false;
+    size="4,4";
+    graph [fontname = "helvetica"];
+    edge [fontname = "helvetica"];
+    node [
+        fontname = "helvetica",
+        shape=Mrecord,
+        style="filled",
+        color="#ccccff",
+        fillcolor="#ddddff"
+    ];
+
+    discrete_gof -> multinomial_gof;
+    unif01_gof -> multinomial_gof;
+    exp_gof -> unif01_gof;
+    density_gof -> exp_gof;
+    vector_density_gof -> exp_gof;
+    mixed_density_gof -> density_gof;
+    mixed_density_gof -> vector_density_gof;
+    mixed_density_gof -> discrete_gof;
+}
