@@ -26,6 +26,7 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from itertools import izip
 import numpy
 import scipy.stats
 from numpy import pi
@@ -38,6 +39,7 @@ from nose.tools import assert_less
 from goftests import multinomial_goodness_of_fit
 from goftests import discrete_goodness_of_fit
 from goftests import auto_density_goodness_of_fit
+# from goftests import mixed_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
 
@@ -118,11 +120,8 @@ default_params = {
     'erlang': [(7,)],
     'dlaplace': [(0.8,)],
     'frechet': [tuple(2 * rand(1)) + (0,) + tuple(2 * rand(2))],
-    'gausshyper': [],  # very slow
     'geom': [(0.1,)],
     'hypergeom': [(40, 14, 24)],
-    'ksone': [],  # ???
-    'levy_stable': [],  # ???
     'logser': [(0.9,)],
     'multivariate_normal': [
         (numpy.ones(1), numpy.eye(1)),
@@ -134,9 +133,6 @@ default_params = {
     'planck': [(0.51,)],
     'poisson': [(20,)],
     'reciprocal': [tuple(numpy.array([0, 1]) + rand(1)[0])],
-    'randint': [],  # too sparse
-    'rv_continuous': [],  # abstract
-    'rv_discrete': [],  # abstract
     'triang': [tuple(rand(1))],
     'truncnorm': [(0.1, 2.0)],
     'vonmises': [tuple(1.0 + rand(1))],
@@ -147,6 +143,12 @@ known_failures = [
     'alpha',
     'dirichlet',
     'boltzmann',
+    'gausshyper',  # very slow
+    'ksone',  # ???
+    'levy_stable',  # ???
+    'randint',  # too sparse
+    'rv_continuous',  # abstract
+    'rv_discrete',  # abstract
 ]
 
 
@@ -168,16 +170,20 @@ def _test_scipy_stats(name):
     for param in params:
         print 'param = {}'.format(param)
         dim = get_dim(dist.rvs(*param))
-        sample_count = 1000 + 1000 * dim
+        sample_count = 100 + 1000 * dim
         samples = list(dist.rvs(*param, size=sample_count))
+
         if hasattr(dist, 'pmf'):
-            probs_dict = {key: dist.pmf(key, *param) for key in set(samples)}
+            probs = [dist.pmf(sample, *param) for sample in samples]
+            probs_dict = dict(izip(samples, probs))
             gof = discrete_goodness_of_fit(samples, probs_dict, plot=True)
         else:
             probs = [dist.pdf(sample, *param) for sample in samples]
             gof = auto_density_goodness_of_fit(samples, probs, plot=True)
-        # gof = mixed_density_goodness_of_fit(samples, probs, plot=True)
         assert_greater(gof, TEST_FAILURE_RATE)
+
+        # This currently fails
+        # gof = mixed_density_goodness_of_fit(samples, probs, plot=True)
 
 
 def test_scipy_stats():
