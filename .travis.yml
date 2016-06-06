@@ -1,13 +1,13 @@
+sudo: false
 language: python
 cache: pip
 python:
   - 2.7
-virtualenv:
-  system_site_packages: true
+  - 3.4
+  - 3.5
 before_install:
-  - pip uninstall numpy -y || echo 'numpy not installed'
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq python-numpy python-scipy
-  - pip install nose scikit-learn pep8
+  - pip install --upgrade pip
+install:
+  - pip install -r requirements-test.txt
 script:
   - make test
