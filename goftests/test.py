@@ -1,5 +1,6 @@
 # Copyright (c) 2014, Salesforce.com, Inc.  All rights reserved.
 # Copyright (c) 2015, Gamelan Labs, Inc.
+# Copyright (c) 2016, Google, Inc.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -45,7 +46,7 @@ from goftests import mixed_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
 
-TEST_FAILURE_RATE = 1e-3
+TEST_FAILURE_RATE = 5e-4
 
 
 def test_multinomial_goodness_of_fit():
@@ -113,11 +114,16 @@ def test_split_continuous_discrete():
 seed_all(0)
 default_params = {
     'bernoulli': [(0.2,)],
+    'beta': [
+        (0.5, 0.5),
+        (0.5, 1.5),
+        (0.5, 2.5),
+    ],
     'binom': [(40, 0.4)],
     'dirichlet': [
-        (1.0 + rand(2),),
-        (1.0 + rand(3),),
-        (1.0 + rand(4),),
+        ([2.0, 2.5],),
+        ([2.0, 2.5, 3.0],),
+        ([2.0, 2.5, 3.0, 3.5],),
     ],
     'erlang': [(7,)],
     'dlaplace': [(0.8,)],
@@ -142,10 +148,9 @@ default_params = {
     'zipf': [(1.2,)],
 }
 
-known_failures = [
+known_failures = set([
     'alpha',
     'boltzmann',
-    'dirichlet',
     'gausshyper',  # very slow
     'ksone',  # ???
     'levy_stable',  # ???
@@ -153,7 +158,22 @@ known_failures = [
     'rv_continuous',  # abstract
     'rv_discrete',  # abstract
     'zipf',  # bug?
-]
+    'invwishart',  # matrix
+    'wishart',  # matrix
+    'matrix_normal',  # matrix
+])
+
+
+def transform_dirichlet(ps):
+    dim = len(ps)
+    assert dim > 1
+    # return ps[:-1] - ps[-1] * (dim ** 0.5 - 1.0) / (dim - 1.0)
+    return ps[:-1]
+
+
+transforms = {
+    'dirichlet': transform_dirichlet,
+}
 
 
 def _test_scipy_stats(name):
@@ -166,20 +186,24 @@ def _test_scipy_stats(name):
         params = [tuple(1.0 + rand(dist.numargs))]
     for param in params:
         print 'param = {}'.format(param)
-        dim = get_dim(dist.rvs(*param))
+        dim = get_dim(dist.rvs(*param, size=2)[0])
         sample_count = 100 + 1000 * dim
         samples = list(dist.rvs(*param, size=sample_count))
+        if name in transforms:
+            transformed = map(transforms[name], samples)
+        else:
+            transformed = samples
 
         if hasattr(dist, 'pmf'):
             probs = [dist.pmf(sample, *param) for sample in samples]
             probs_dict = dict(izip(samples, probs))
-            gof = discrete_goodness_of_fit(samples, probs_dict, plot=True)
+            gof = discrete_goodness_of_fit(transformed, probs_dict, plot=True)
         else:
             probs = [dist.pdf(sample, *param) for sample in samples]
-            gof = auto_density_goodness_of_fit(samples, probs, plot=True)
+            gof = auto_density_goodness_of_fit(transformed, probs, plot=True)
         assert_greater(gof, TEST_FAILURE_RATE)
 
-        gof = mixed_density_goodness_of_fit(samples, probs, plot=True)
+        gof = mixed_density_goodness_of_fit(transformed, probs, plot=True)
         assert_greater(gof, TEST_FAILURE_RATE)
 
 
