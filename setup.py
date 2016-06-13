@@ -61,8 +61,7 @@ config = {
     'license': 'Revised BSD',
     'install_requires': ['numpy', 'scipy'],
     'packages': ['goftests'],
-    'tests_require': ['nose'],
-    'test_suite': 'nose.collector',
+    'test_suite': 'goftests.test',
     'include_package_data': True,
 }
 
