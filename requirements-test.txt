@@ -1,4 +1,3 @@
 -r requirements.txt
-pep8
-pyflakes
 nose
+flake8

@@ -10,4 +10,5 @@ before_install:
 install:
   - pip install -r requirements-test.txt
 script:
-  - make test
+  - find . -type f -name \*.py -exec flake8 {} \;
+  - python setup.py test

@@ -1,8 +1,7 @@
 .phony: test
 
 test:
-	find . | grep '\.py$$' | xargs pep8
-	find . | grep '\.py$$' | xargs pyflakes
+	find . -type f -name \*.py -exec flake8 {} \;
 	nosetests -v goftests
 	@echo '------------'
 	@echo 'PASSED TESTS'
