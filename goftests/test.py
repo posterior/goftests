@@ -46,6 +46,10 @@ from goftests import mixed_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
 
+NUM_BASE_SAMPLES = 200
+
+NUM_SAMPLES_SCALE = 1000
+
 TEST_FAILURE_RATE = 5e-4
 
 
@@ -187,7 +191,7 @@ def _test_scipy_stats(name):
     for param in params:
         print 'param = {}'.format(param)
         dim = get_dim(dist.rvs(*param, size=2)[0])
-        sample_count = 100 + 1000 * dim
+        sample_count = NUM_BASE_SAMPLES + NUM_SAMPLES_SCALE * dim
         samples = list(dist.rvs(*param, size=sample_count))
         if name in transforms:
             transformed = map(transforms[name], samples)
