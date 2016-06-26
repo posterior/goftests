@@ -26,8 +26,11 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-from itertools import izip
+from __future__ import division
+try:
+    from itertools import izip as zip
+except ImportError:
+    pass
 import numpy
 import scipy.stats
 from numpy import pi
@@ -111,7 +114,7 @@ def split_example(i):
 
 
 def test_split_continuous_discrete():
-    for i in xrange(len(split_examples)):
+    for i in range(len(split_examples)):
         yield split_example, i
 
 
@@ -189,18 +192,18 @@ def _test_scipy_stats(name):
     except KeyError:
         params = [tuple(1.0 + rand(dist.numargs))]
     for param in params:
-        print 'param = {}'.format(param)
+        print('param = {}'.format(param))
         dim = get_dim(dist.rvs(*param, size=2)[0])
         sample_count = NUM_BASE_SAMPLES + NUM_SAMPLES_SCALE * dim
         samples = list(dist.rvs(*param, size=sample_count))
         if name in transforms:
-            transformed = map(transforms[name], samples)
+            transformed = list(map(transforms[name], samples))
         else:
             transformed = samples
 
         if hasattr(dist, 'pmf'):
             probs = [dist.pmf(sample, *param) for sample in samples]
-            probs_dict = dict(izip(samples, probs))
+            probs_dict = dict(zip(samples, probs))
             gof = discrete_goodness_of_fit(transformed, probs_dict, plot=True)
         else:
             probs = [dist.pdf(sample, *param) for sample in samples]

@@ -1,6 +1,3 @@
 numpy
 scipy
 scikit-learn
-pep8
-pyflakes
-nose

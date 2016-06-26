@@ -43,13 +43,26 @@ config = {
     'version': VERSION,
     'description': description,
     'long_description': long_description,
+    'classifiers': [
+        'Development Status :: 4 - Beta',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+    ],
     'url': 'https://github.com/posterior/goftests',
     'author': 'Fritz Obermeyer',
     'maintainer': 'Fritz Obermeyer',
     'maintainer_email': 'fritz.obermeyer@gmail.com',
     'license': 'Revised BSD',
+    'install_requires': ['numpy', 'scipy', 'scikit-learn'],
     'packages': ['goftests'],
-    'py_modules': ['goftests'],
+    'tests_require': ['nose'],
+    'test_suite': 'nose.collector',
 }
 
 setup(**config)
