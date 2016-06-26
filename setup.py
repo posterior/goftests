@@ -29,7 +29,7 @@
 
 from setuptools import setup
 
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
