@@ -50,7 +50,7 @@ from goftests import mixed_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
 
-NUM_BASE_SAMPLES = 200
+NUM_BASE_SAMPLES = 250
 
 NUM_SAMPLES_SCALE = 1000
 
@@ -149,6 +149,7 @@ default_params = {
     'planck': [(0.51,)],
     'poisson': [(20,)],
     'reciprocal': [tuple(numpy.array([0, 1]) + rand(1)[0])],
+    'trapz': [(0.333, 0.666)],
     'triang': [tuple(rand(1))],
     'truncnorm': [(0.1, 2.0)],
     'vonmises': [tuple(1.0 + rand(1))],
@@ -162,9 +163,12 @@ known_failures = set([
     'gausshyper',  # very slow
     'ksone',  # ???
     'levy_stable',  # ???
+    'ortho_group',  # matrix
     'randint',  # too sparse
+    'random_correlation',  # matrix
     'rv_continuous',  # abstract
     'rv_discrete',  # abstract
+    'special_ortho_group',  # matrix
     'zipf',  # bug?
     'invwishart',  # matrix
     'wishart',  # matrix
