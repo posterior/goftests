@@ -28,19 +28,22 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from __future__ import division
-
-import random
-import sys
-import numpy
-import numpy.random
-from numpy import pi
-import scipy.stats
-from scipy.special import gamma
+from collections import defaultdict
+from math import gamma
 try:
     from itertools import izip as zip
 except ImportError:
     pass
-from collections import defaultdict
+import random
+import sys
+
+import numpy
+from math import gamma
+import numpy.random
+from numpy import pi
+from scipy.spatial import cKDTree
+
+from .utils import chi2sf
 
 NoneType = type(None)
 
@@ -123,7 +126,7 @@ def multinomial_goodness_of_fit(
     if not truncated:
         dof -= 1
 
-    survival = scipy.stats.chi2.sf(chi_squared, dof)
+    survival = chi2sf(chi_squared, dof)
     return survival
 
 
@@ -196,11 +199,9 @@ def volume_of_sphere(dim, radius):
 
 
 def get_nearest_neighbor_distances(samples):
-    from sklearn.neighbors import NearestNeighbors
     if not hasattr(samples[0], '__iter__'):
         samples = numpy.array([samples]).T
-    neighbors = NearestNeighbors(n_neighbors=2).fit(samples)
-    distances, indices = neighbors.kneighbors(samples)
+    distances, indices = cKDTree(samples).query(samples, k=2)
     return distances[:, 1]
 
 
@@ -385,7 +386,7 @@ def mixed_density_goodness_of_fit(samples, probs, plot=False, normalized=True):
         norm_variance = sum(1.0 / count for count in discrete_counts)
         dof = len(discrete_counts)
         chi_squared = (1 - norm) ** 2 / norm_variance
-        gofs.append(scipy.stats.chi2.sf(chi_squared, dof))
+        gofs.append(chi2sf(chi_squared, dof))
         if plot:
             print('norm = {:.4g} +- {:.4g}'.format(norm, norm_variance ** 0.5))
             print('     = {}'.format(
