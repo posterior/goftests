@@ -49,12 +49,22 @@ from goftests import auto_density_goodness_of_fit
 from goftests import mixed_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
+from goftests import chi2sf
 
 NUM_BASE_SAMPLES = 250
 
 NUM_SAMPLES_SCALE = 1000
 
 TEST_FAILURE_RATE = 5e-4
+
+
+def test_chi2cdf(xmin=0.0, xmax=100.0, nx=500, smin=1, smax=41, sstep=1.5):
+    xlist = numpy.linspace(xmin, xmax, nx)
+    slist = numpy.arange(smin, smax, sstep)
+    for s in slist:
+        for x in xlist:
+            delta = scipy.stats.chi2.sf(x, s) - chi2sf(x, s)
+            assert_almost_equal(delta, 0.0)
 
 
 def test_multinomial_goodness_of_fit():

@@ -32,15 +32,15 @@ from __future__ import division
 import random
 import sys
 import numpy
+from math import gamma
 import numpy.random
 from numpy import pi
-import scipy.stats
-from scipy.special import gamma
 try:
     from itertools import izip as zip
 except ImportError:
     pass
 from collections import defaultdict
+from .utils import chi2sf
 
 NoneType = type(None)
 
@@ -123,7 +123,7 @@ def multinomial_goodness_of_fit(
     if not truncated:
         dof -= 1
 
-    survival = scipy.stats.chi2.sf(chi_squared, dof)
+    survival = chi2sf(chi_squared, dof)
     return survival
 
 
@@ -385,7 +385,7 @@ def mixed_density_goodness_of_fit(samples, probs, plot=False, normalized=True):
         norm_variance = sum(1.0 / count for count in discrete_counts)
         dof = len(discrete_counts)
         chi_squared = (1 - norm) ** 2 / norm_variance
-        gofs.append(scipy.stats.chi2.sf(chi_squared, dof))
+        gofs.append(chi2sf(chi_squared, dof))
         if plot:
             print('norm = {:.4g} +- {:.4g}'.format(norm, norm_variance ** 0.5))
             print('     = {}'.format(
