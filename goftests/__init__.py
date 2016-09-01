@@ -28,19 +28,20 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from __future__ import division
-
-import random
-import sys
-import numpy
-import numpy.random
-from numpy import pi
-import scipy.stats
-from scipy.special import gamma
+from collections import defaultdict
 try:
     from itertools import izip as zip
 except ImportError:
     pass
-from collections import defaultdict
+import random
+import sys
+
+import numpy
+import numpy.random
+from numpy import pi
+import scipy.stats
+from scipy.spatial import cKDTree
+from scipy.special import gamma
 
 NoneType = type(None)
 
@@ -196,11 +197,9 @@ def volume_of_sphere(dim, radius):
 
 
 def get_nearest_neighbor_distances(samples):
-    from sklearn.neighbors import NearestNeighbors
     if not hasattr(samples[0], '__iter__'):
         samples = numpy.array([samples]).T
-    neighbors = NearestNeighbors(n_neighbors=2).fit(samples)
-    distances, indices = neighbors.kneighbors(samples)
+    distances, indices = cKDTree(samples).query(samples, k=2)
     return distances[:, 1]
 
 

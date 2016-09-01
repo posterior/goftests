@@ -59,7 +59,7 @@ config = {
     'maintainer': 'Fritz Obermeyer',
     'maintainer_email': 'fritz.obermeyer@gmail.com',
     'license': 'Revised BSD',
-    'install_requires': ['numpy', 'scipy', 'scikit-learn'],
+    'install_requires': ['numpy', 'scipy'],
     'packages': ['goftests'],
     'tests_require': ['nose'],
     'test_suite': 'nose.collector',
