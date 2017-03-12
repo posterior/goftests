@@ -173,6 +173,8 @@ known_failures = set([
     'invwishart',  # matrix
     'wishart',  # matrix
     'matrix_normal',  # matrix
+    'rv_histogram',  # TODO Support distributions without .numargs attribute.
+    'multinomial',  # numargs
 ])
 
 
