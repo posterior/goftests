@@ -64,14 +64,14 @@ def incomplete_gamma(x, s):
     numerical error. This function matches the results from
     scipy to numerical precision.
     """
-    value = 0.0
-    if x < 0.0:
-        return 1.0
+    if x < 0:
+        return 1
     if x > 1e3:
         return math.gamma(s)
     log_gamma_s = math.lgamma(s)
     log_x = log(x)
-    for k in range(0, 100):
+    value = 0
+    for k in range(100):
         log_num = (k + s)*log_x + (-x) + log_gamma_s
         log_denom = math.lgamma(k + s + 1)
         value += math.exp(log_num - log_denom)
@@ -100,7 +100,7 @@ def chi2sf(x, s):
     This function matches the results from
     scipy to numerical precision.
     """
-    top = incomplete_gamma(x/2.0, s/2.0)
-    bottom = math.gamma(s/2.0)
+    top = incomplete_gamma(x/2, s/2)
+    bottom = math.gamma(s/2)
     value = top/bottom
-    return 1.0 - value
+    return 1 - value
