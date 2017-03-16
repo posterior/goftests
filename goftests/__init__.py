@@ -38,7 +38,6 @@ import random
 import sys
 
 import numpy
-from math import gamma
 import numpy.random
 from numpy import pi
 from scipy.spatial import cKDTree
