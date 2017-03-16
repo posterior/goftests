@@ -63,7 +63,7 @@ config = {
     'packages': ['goftests'],
     'tests_require': ['nose'],
     'test_suite': 'nose.collector',
-    'data_files': [('', ['LICENSE.txt'])],
+    'include_package_data': True,
 }
 
 setup(**config)
