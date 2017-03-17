@@ -29,7 +29,7 @@
 
 from setuptools import setup
 
-VERSION = '0.2.4'
+VERSION = '0.2.5'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
@@ -63,7 +63,7 @@ config = {
     'packages': ['goftests'],
     'tests_require': ['nose'],
     'test_suite': 'nose.collector',
-    'data_files': [('', ['LICENSE.txt'])],
+    'include_package_data': True,
 }
 
 setup(**config)
