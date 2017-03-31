@@ -59,9 +59,10 @@ config = {
     'maintainer': 'Fritz Obermeyer',
     'maintainer_email': 'fritz.obermeyer@gmail.com',
     'license': 'Revised BSD',
-    'install_requires': ['kdtree', 'numpy', 'scipy'],
+    'install_requires': ['kdtree', 'numpy'],
     'packages': ['goftests'],
     'test_suite': 'goftests.test',
+    'tests_require': ['scipy'],
     'include_package_data': True,
 }
 
