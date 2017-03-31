@@ -32,6 +32,7 @@ try:
     from itertools import izip as zip
 except ImportError:
     pass
+from itertools import product
 import random
 from unittest import skip
 from unittest import TestCase
@@ -48,6 +49,7 @@ from goftests import auto_density_goodness_of_fit
 from goftests import mixed_density_goodness_of_fit
 from goftests import split_discrete_continuous
 from goftests import volume_of_sphere
+from goftests import chi2sf
 
 NUM_BASE_SAMPLES = 250
 
@@ -110,6 +112,15 @@ class TestSplitDiscreteContinuous(TestCase):
             d, c = split_discrete_continuous(mixed)
             self.assertEqual(d, discrete)
             self.assertAlmostEqual(c, continuous)
+
+
+class TestChi2CDF(TestCase):
+
+    def test_chi2cdf(self):
+        xlist = numpy.linspace(0, 100, 500)
+        slist = numpy.arange(1, 41, 1.5)
+        for s, x in product(slist, xlist):
+            self.assertAlmostEqual(scipy.stats.chi2.sf(x, s), chi2sf(x, s))
 
 
 class DistributionTestBase(object):
