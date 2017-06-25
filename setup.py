@@ -27,16 +27,26 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import sys
+
 from setuptools import setup
 
-VERSION = '0.2.5'
+VERSION = '0.2.6'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
-    with open('README.md') as f:
-        long_description = f.read()
-except IOError:
-    long_description = description
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except (IOError, ImportError, OSError) as e:
+    sys.stderr.write('Failed to convert README.md to rst:\n  {}\n'.format(e))
+    sys.stderr.flush()
+    try:
+        with open('README.md') as f:
+            long_description = f.read()
+    except IOError:
+        long_description = description
+
+print(long_description)
 
 config = {
     'name': 'goftests',
