@@ -31,7 +31,7 @@ import sys
 
 from setuptools import setup
 
-VERSION = '0.2.6'
+VERSION = '0.2.7'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
@@ -45,8 +45,6 @@ except (IOError, ImportError, OSError) as e:
             long_description = f.read()
     except IOError:
         long_description = description
-
-print(long_description)
 
 config = {
     'name': 'goftests',
