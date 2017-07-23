@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/posterior/goftests.svg?branch=master)](https://travis-ci.org/posterior/goftests)
 [![Code Quality](http://img.shields.io/scrutinizer/g/posterior/goftests.svg)](https://scrutinizer-ci.com/g/posterior/goftests/code-structure/master/hot-spots)
-[![Latest Version](https://badge.fury.io/py/goftests.svg)](https://pypi.python.org/pypi/goftests)
+[![PyPI Version](https://badge.fury.io/py/goftests.svg)](https://pypi.python.org/pypi/goftests)
+[![Anaconda Version](https://anaconda.org/conda-forge/goftests/badges/version.svg)](https://anaconda.org/conda-forge/goftests)
 [![DOI](https://zenodo.org/badge/30935971.svg)](https://zenodo.org/badge/latestdoi/30935971)
 
 Generic goodness of fit tests for random plain old data.
