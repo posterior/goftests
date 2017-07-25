@@ -2,6 +2,6 @@
 
 test:
 	find . -type f -name \*.py -exec flake8 {} \;
-	nosetests -v goftests
+	python -m unittest discover
 	@echo '------------'
 	@echo 'PASSED TESTS'

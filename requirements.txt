@@ -1,2 +1,2 @@
+kdtree
 numpy
-scipy

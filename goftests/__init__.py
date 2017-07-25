@@ -34,13 +34,14 @@ try:
     from itertools import izip as zip
 except ImportError:
     pass
+import math
 import random
 import sys
 
+import kdtree
 import numpy
 import numpy.random
 from numpy import pi
-from scipy.spatial import cKDTree
 
 from .utils import chi2sf
 
@@ -193,15 +194,38 @@ def density_goodness_of_fit(
 
 
 def volume_of_sphere(dim, radius):
+    """Compute the radius or radii of a hypersphere or hyperspheres.
+
+    This method returns the volume of a hypersphere of dimension `dim`
+    and the given `radius`. If `radius` is an iterable, it is assumed to
+    be an iterable of radii, and this function returns a list of volumes
+    of hyperspheres, each of whose radius is the corresponding element
+    of `radius`.
+
+    """
     assert isinstance(dim, INTEGRAL_TYPES)
-    return radius ** dim * pi ** (0.5 * dim) / gamma(0.5 * dim + 1)
+    denom = gamma(0.5 * dim + 1)
+    numer_scale = pi ** (0.5 * dim)
+    if hasattr(radius, '__iter__'):
+        return [(r ** dim) * numer_scale / denom for r in radius]
+    else:
+        return (radius ** dim) * numer_scale / denom
 
 
 def get_nearest_neighbor_distances(samples):
     if not hasattr(samples[0], '__iter__'):
-        samples = numpy.array([samples]).T
-    distances, indices = cKDTree(samples).query(samples, k=2)
-    return distances[:, 1]
+        samples = [(x, ) for x in samples]
+    if isinstance(samples, numpy.ndarray):
+        samples = samples.tolist()
+    tree = kdtree.create(samples)
+    # `tree.search_knn(point, k=2)` returns a list of the two nearest
+    # neighbors. The first neighbor is always the point itself, so we
+    # get the second neighbor (that's the first subscript [1]). It
+    # actually returns a pair comprising the node in the kdtree and the
+    # *squared* distance, so we just extract the squared distance
+    # (that's the second subscript [1]). Finally, we un-square the
+    # squared distance.
+    return [math.sqrt(tree.search_knn(point, k=2)[1][1]) for point in samples]
 
 
 def vector_density_goodness_of_fit(
