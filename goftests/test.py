@@ -40,7 +40,7 @@ from unittest import TestCase
 import numpy
 import scipy.stats
 from numpy import pi
-from numpy.testing import rand
+from numpy.random import rand
 
 from goftests import get_dim
 from goftests import multinomial_goodness_of_fit
