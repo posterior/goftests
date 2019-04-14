@@ -37,13 +37,13 @@ description = 'Goodness of fit tests for general datatypes'
 try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')
-except (IOError, ImportError, OSError) as e:
+    print(long_description)
+except Exception as e:
     sys.stderr.write('Failed to convert README.md to rst:\n  {}\n'.format(e))
     sys.stderr.flush()
     try:
-        with open('README.md') as f:
-            long_description = f.read()
-    except IOError:
+        long_description = open('README.md').read()
+    except Exception:
         long_description = description
 
 config = {

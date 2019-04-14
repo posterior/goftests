@@ -94,7 +94,7 @@ def update():
     Update headers on all files to match LICNESE.txt.
     '''
     for filename in FILES:
-        extension = re.search('\.[^.]*$', filename).group()
+        extension = re.search(r'\.[^.]*$', filename).group()
         lines = read_and_strip_lines(filename)
         if lines and lines[0]:
             if extension == '.py' and lines[0].startswith('class '):
