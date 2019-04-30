@@ -107,7 +107,7 @@ def multinomial_goodness_of_fit(
     if plot:
         print_histogram(probs, counts)
     for p, c in zip(probs, counts):
-        if p == 1:
+        if abs(p - 1) < 1e-8:
             return 1 if c == total_count else 0
         assert p < 1, 'bad probability: %g' % p
         if p > 0:
