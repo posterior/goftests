@@ -130,5 +130,6 @@ or reduce to standard tests in another package like
 Copyright (c) 2014 Salesforce.com, Inc. All rights reserved. <br/>
 Copyright (c) 2015 Gamelan Labs, Inc. <br/>
 Copyright (c) 2016 Google, Inc. <br/>
+Copyright (c) 2019 Gamalon, Inc. <br/>
 Licensed under the Revised BSD License.
 See [LICENSE.txt](LICENSE.txt) for details.
