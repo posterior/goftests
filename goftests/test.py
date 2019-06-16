@@ -495,16 +495,6 @@ class TestFoldedNormal(ContinuousTestBase, TestCase):
     dist = scipy.stats.foldnorm
 
 
-class TestFrechetRight(ContinuousTestBase, TestCase):
-
-    dist = scipy.stats.frechet_r
-
-
-class TestFrechetLeft(ContinuousTestBase, TestCase):
-
-    dist = scipy.stats.frechet_l
-
-
 class TestGeneralizedLogistic(ContinuousTestBase, TestCase):
 
     dist = scipy.stats.genlogistic
@@ -827,11 +817,13 @@ class TestWald(ContinuousTestBase, TestCase):
 
 class TestWeibullMin(ContinuousTestBase, TestCase):
 
+    # This also covers what was previously available as `frechet_r`.
     dist = scipy.stats.weibull_min
 
 
 class TestWeibullMax(ContinuousTestBase, TestCase):
 
+    # This also covers what was previously available as `frechet_l`.
     dist = scipy.stats.weibull_max
 
 
