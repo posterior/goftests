@@ -2,6 +2,7 @@
 # Copyright (c) 2015, Gamelan Labs, Inc.
 # Copyright (c) 2016, Google, Inc.
 # Copyright (c) 2016, Gamelan Labs, Inc.
+# Copyright (c) 2019, Gamalon, Inc.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -495,16 +496,6 @@ class TestFoldedNormal(ContinuousTestBase, TestCase):
     dist = scipy.stats.foldnorm
 
 
-class TestFrechetRight(ContinuousTestBase, TestCase):
-
-    dist = scipy.stats.frechet_r
-
-
-class TestFrechetLeft(ContinuousTestBase, TestCase):
-
-    dist = scipy.stats.frechet_l
-
-
 class TestGeneralizedLogistic(ContinuousTestBase, TestCase):
 
     dist = scipy.stats.genlogistic
@@ -827,11 +818,13 @@ class TestWald(ContinuousTestBase, TestCase):
 
 class TestWeibullMin(ContinuousTestBase, TestCase):
 
+    # This also covers what was previously available as `frechet_r`.
     dist = scipy.stats.weibull_min
 
 
 class TestWeibullMax(ContinuousTestBase, TestCase):
 
+    # This also covers what was previously available as `frechet_l`.
     dist = scipy.stats.weibull_max
 
 
