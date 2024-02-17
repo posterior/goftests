@@ -542,9 +542,9 @@ class TestGeneralizedHalfLogistic(ContinuousTestBase, TestCase):
     dist = scipy.stats.genhalflogistic
 
 
-class TestGilbrat(ContinuousTestBase, TestCase):
+class TestGibrat(ContinuousTestBase, TestCase):
 
-    dist = scipy.stats.gilbrat
+    dist = scipy.stats.gibrat
 
 
 class TestGompertz(ContinuousTestBase, TestCase):
