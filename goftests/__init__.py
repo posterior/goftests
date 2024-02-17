@@ -114,7 +114,7 @@ def multinomial_goodness_of_fit(
         if p > 0:
             mean = total_count * p
             variance = total_count * p * (1 - p)
-            assert variance > 1,\
+            assert variance > 1, \
                 'WARNING goodness of fit is inaccurate; use more samples'
             chi_squared += (c - mean) ** 2 / variance
             dof += 1
@@ -139,8 +139,8 @@ def unif01_goodness_of_fit(samples, plot=False):
     assert samples.max() <= 1.0
     bin_count = int(round(len(samples) ** 0.333))
     assert bin_count >= 7, 'WARNING imprecise test, use more samples'
-    probs = numpy.ones(bin_count, dtype=numpy.float) / bin_count
-    counts = numpy.zeros(bin_count, dtype=numpy.int)
+    probs = numpy.ones(bin_count, dtype=float) / bin_count
+    counts = numpy.zeros(bin_count, dtype=int)
     for sample in samples:
         counts[min(bin_count - 1, int(bin_count * sample))] += 1
     return multinomial_goodness_of_fit(probs, counts, len(samples), plot=plot)
