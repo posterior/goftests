@@ -31,7 +31,7 @@ import sys
 
 from setuptools import setup
 
-VERSION = '0.2.7'
+VERSION = '0.3.0'
 description = 'Goodness of fit tests for general datatypes'
 
 try:
@@ -55,12 +55,7 @@ config = {
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
     ],
     'url': 'https://github.com/posterior/goftests',
     'author': 'Fritz Obermeyer',
